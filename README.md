@@ -14,12 +14,11 @@ __node__
 
     # DOCKER_IMAGE is required
     DOCKER_IMAGE="node:5.12.0"
-    DOCKER_ENTRYPOINT="--entrypoint /usr/local/bin/node"
 
     # this must come after any DOCKER_... defined variables
     . "$PATH_TO/docker.sh/_dockerh.sh"
 
-    docker $(run_with --rm -it -v $(pwd):/usr/src -w /usr/src)
+    docker $(run_with --rm -it -v $(pwd):/usr/src -w /usr/src --entrypoint /usr/local/bin/node)
 
 
 The basic setup appends the `run_with` arguemnts to the `run` command
@@ -32,9 +31,6 @@ To append additional docker flags to the command you can separate docker flags f
 
     $ node ./index.js -- -p 4000:3000
     # docker run --rm -it -v /path/to/here:/usr/src -v /usr/src --entrypoint /usr/local/bin/node -p 4000:3000 node:5.12.0 ./index.js
-
-
-*Note, appending `--entrypoint` to the command will results in the overwriting of the `--entrypoint` flag as defined in `DOCKER_ENTRYPOINT`.*
 
 
 ## License
