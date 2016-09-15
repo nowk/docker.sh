@@ -7,29 +7,32 @@ COMMAND_LINE_ARGS=("$@")
 # of certain flags returning a new array with specified duplicates to take the
 # last given value
 docker_normalize_flags() {
-	args=()
-	i=1
+	_args=("$@")
+	args_=()
+	i=0
 	j=$(($# + 1))
 	while [ $i -lt $j ] ; do
-		arg="${!i}"
+		arg="${_args[i]}"
 		case "$arg" in
 			--entrypoint)
-				next_arg_index=$((i + 1))
-				DOCKER_ENTRYPOINT="--entrypoint ${!next_arg_index}"
-
 				i=$((i + 1)) # additional incrementation required
+				DOCKER_ENTRYPOINT="--entrypoint ${_args[i]}"
 			;;
 			--entrypoint=*)
 				DOCKER_ENTRYPOINT="$arg"
 			;;
+			--)
+				# we want to remove any additional -- delimiters that might 
+				# be set due to chaining
+			;;
 			*)
-				args+=("$arg ")
+				args_+=("$arg ")
 			;;
 		esac
 		i=$((i + 1))
 	done
-	args=("${args[@]}" "$DOCKER_ENTRYPOINT")
-	echo ${args[@]}
+	args_=("${args_[@]}" "$DOCKER_ENTRYPOINT")
+	echo "${args_[@]}"
 }
 
 # docker_split_flag_index find the index for -- which is the split dellimiter
