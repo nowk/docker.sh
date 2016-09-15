@@ -40,7 +40,6 @@ docker_split_flag_index() {
 		if [ "$arg" = "--" ] ; then break; fi
 		i=$((i + 1))
 	done
-
 	echo $i
 }
 
