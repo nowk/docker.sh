@@ -31,7 +31,7 @@ docker_normalize_flags() {
 		esac
 		i=$((i + 1))
 	done
-	args_=("${args_[@]}" "$DOCKER_ENTRYPOINT")
+	args_+=(" $DOCKER_ENTRYPOINT") # add the --entrypoint
 	echo "${args_[@]}"
 }
 
