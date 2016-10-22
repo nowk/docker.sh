@@ -29,3 +29,27 @@ DOCKER_IMAGE="image:1.2.3"
 	exp=(run -e QUX=quux --entrypoint /foo image:1.2.3 --version)
 	[[ "$results" = "${exp[@]}" ]]
 }
+
+@test "remove flag using the ! bang option" {
+	COMMAND_LINE_ARGS=(--version -- !--rm)
+	results=$(run_with --rm -it)
+
+	echo "${results[@]}"
+	exp=(run -it image:1.2.3 --version)
+	[[ "$results" = "${exp[@]}" ]]
+}
+
+@test "contains returns boolean based on need vs haystack" {
+	results=$(contains "-it" "--rm -it")
+	echo "$results"
+	exp=true
+	[[ "$results" = "$exp" ]]
+}
+
+@test "pop removes the given from flag(s) from annother array of flags" {
+	args=("--rm -it --entrypoint foo")
+	results=$(pop "-it --rm" ${args[@]})
+	echo "$results"
+	exp=(" --entrypoint foo") # FIXME what is with the extra space before --entrypoint...?
+	[[ "$results" = "${exp[@]}" ]]
+}
