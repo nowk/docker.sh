@@ -21,6 +21,15 @@ DOCKER_IMAGE="image:1.2.3"
 	[[ "$results" = "${exp[@]}" ]]
 }
 
+@test "-w gets overwritten by the command line flag -- -w" {
+	COMMAND_LINE_ARGS=(-- -w /foo)
+	results=$(run_with -w /bar)
+
+	echo "$results"
+	exp=(run -w /foo image:1.2.3)
+	[[ "$results" = "${exp[@]}" ]]
+}
+
 @test "resolving double -- delimiter flags" {
 	COMMAND_LINE_ARGS=(--version -- --entrypoint /foo -- -e QUX=quux)
 	results=$(run_with --entrypoint /baz)

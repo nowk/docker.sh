@@ -21,6 +21,13 @@ docker_normalize_flags() {
 			--entrypoint=*)
 				DOCKER_ENTRYPOINT="$arg"
 			;;
+			-w)
+				i=$((i + 1))
+				DOCKER_WORKDIR="-w ${_args[i]}"
+			;;
+			-w=*)
+				DOCKER_WORKDIR="$arg"
+			;;
 			--)
 				# we want to remove any additional -- delimiters that might 
 				# be set due to chaining
@@ -35,6 +42,7 @@ docker_normalize_flags() {
 		i=$((i + 1))
 	done
 	args_+=(" $DOCKER_ENTRYPOINT") # add the --entrypoint
+	args_+=(" $DOCKER_WORKDIR")    # add the -w
 	echo "${args_[@]}"
 }
 
